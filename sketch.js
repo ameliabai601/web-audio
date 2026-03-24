@@ -22,7 +22,7 @@ function draw() {
   let cx = width / 2;
   let cy = height / 2;
 
-  // 没播放 → 完全静止
+  // 没播放时完全静止
   if (!song.isPlaying()) {
     drawCircle(cx, cy, 180);
     return;
@@ -37,39 +37,38 @@ function draw() {
   drawCircle(cx, cy, size);
 }
 
-// 🌌 蓝紫渐变背景
 function drawGradientBackground() {
   for (let y = 0; y < height; y++) {
     let t = y / height;
 
-    let r = lerp(10, 40, t);
-    let g = lerp(10, 20, t);
-    let b = lerp(40, 90, t);
+    // 很明显的深蓝 -> 紫色
+    let r = lerp(20, 90, t);
+    let g = lerp(10, 30, t);
+    let b = lerp(90, 180, t);
 
     stroke(r, g, b);
     line(0, y, width, y);
   }
 }
 
-// 🫁 呼吸球（蓝紫）
 function drawCircle(x, y, s) {
-  let t = map(s, 180, 260, 0, 1);
+  let t = map(s, 180, 260, 0, 1, true);
 
-  // 蓝 → 紫
-  let r = lerp(100, 180, t);
+  // 明显的蓝 -> 紫
+  let r = lerp(80, 180, t);
   let g = lerp(120, 80, t);
   let b = lerp(255, 255, t);
 
-  // 外层 glow
-  fill(r, g, b, 30);
-  ellipse(x, y, s * 1.6);
+  // 外层大光晕
+  fill(r, g, b, 35);
+  ellipse(x, y, s * 1.9);
 
-  // 中层 glow
+  // 中层光晕
   fill(r, g, b, 80);
-  ellipse(x, y, s * 1.3);
+  ellipse(x, y, s * 1.45);
 
-  // 核心
-  fill(r, g, b, 200);
+  // 核心圆
+  fill(r, g, b, 220);
   ellipse(x, y, s);
 }
 
