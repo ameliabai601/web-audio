@@ -1,79 +1,50 @@
 let song;
 let amplitude;
 
-let cx, cy;
-
-let baseSize = 180;
-let currentSize = 180;
+let size = 180;
 let targetSize = 180;
 
 let started = false;
 
 function preload() {
-  // 按你的真实文件名改
-  song = loadSound("sounds:another-day-of-sun.mp3.mp3");
+  song = loadSound("another-day-of-sun.mp3");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  cx = width / 2;
-  cy = height / 2;
-
   amplitude = new p5.Amplitude();
-  amplitude.smooth(0.9);
-
   noStroke();
 }
 
 function draw() {
-  background(15, 15, 18);
+  background(15);
 
-  cx = width / 2;
-  cy = height / 2;
-
-  // 没播放时，完全静止
+  let cx = width / 2;
+  let cy = height / 2;
+  
   if (!song.isPlaying()) {
-    drawCircle(baseSize);
+    drawCircle(cx, cy, 180);
     return;
   }
 
   let level = amplitude.getLevel();
 
-  // 很简单的呼吸映射
-  targetSize = map(level, 0, 0.2, 180, 300, true);
+  targetSize = map(level, 0, 0.2, 180, 260, true);
 
-  // 缓动，让变化更柔和
-  currentSize += (targetSize - currentSize) * 0.08;
+  size += (targetSize - size) * 0.1;
 
-  drawCircle(currentSize);
+  drawCircle(cx, cy, size);
 }
 
-function drawCircle(size) {
-  // 外层淡光
-  fill(255, 235, 210, 35);
-  ellipse(cx, cy, size * 1.35);
+function drawCircle(x, y, s) {
+  fill(255, 230, 200, 40);
+  ellipse(x, y, s * 1.4);
 
-  // 主圆
-  fill(255, 240, 220, 230);
-  ellipse(cx, cy, size);
-
-  // 小高光
-  fill(255, 255, 255, 40);
-  ellipse(cx - size * 0.14, cy - size * 0.14, size * 0.2);
+  fill(255, 240, 220);
+  ellipse(x, y, s);
 }
 
 function mousePressed() {
-  startExperience();
-}
-
-function keyPressed() {
-  if (key === " ") {
-    startExperience();
-    return false;
-  }
-}
-
-function startExperience() {
   if (!started) {
     userStartAudio();
     document.getElementById("splash").classList.add("hidden");
@@ -89,6 +60,4 @@ function startExperience() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  cx = width / 2;
-  cy = height / 2;
 }
